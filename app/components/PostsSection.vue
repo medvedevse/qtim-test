@@ -5,7 +5,7 @@
 	>
 		<ul class="posts-list">
 			<PostCard
-				v-for="post in posts.slice(elems.begin, elems.end)"
+				v-for="post in posts.slice(elemBegin, elemEnd)"
 				:key="post.id"
 				:post="post"
 			/>
@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 const { getPosts } = usePostsStore();
-const { countPages, pagesArr, textRef, isOverflowing, elems } = storeToRefs(
+const { countPages, pagesArr, elemEnd, elemBegin } = storeToRefs(
 	usePostsStore()
 );
 const posts = await getPosts();
@@ -27,13 +27,6 @@ onMounted(() => {
 
 		for (let page = 1; page <= countPages.value; page++) {
 			pagesArr.value.push(page);
-		}
-	}
-
-	if (textRef.value) {
-		for (const key in textRef.value) {
-			isOverflowing.value =
-				textRef.value[key].scrollHeight > textRef.value[key].clientHeight;
 		}
 	}
 });

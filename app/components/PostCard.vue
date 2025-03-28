@@ -13,12 +13,12 @@
 			>
 				{{ post.title }}
 			</p>
-			<p
+			<NuxtLink
 				v-if="isOverflowing"
 				class="more-link"
 			>
 				Read more
-			</p>
+			</NuxtLink>
 		</NuxtLink>
 	</li>
 </template>
@@ -28,7 +28,14 @@ import type { IPost } from '~/types';
 
 defineProps<{ post: IPost }>();
 
-const { isOverflowing } = usePostsStore();
+const { isOverflowing, textRef } = storeToRefs(usePostsStore());
+
+onMounted(() => {
+	if (textRef.value) {
+		isOverflowing.value =
+			textRef.value.scrollHeight > textRef.value.clientHeight;
+	}
+});
 </script>
 
 <style scoped lang="scss">
@@ -59,7 +66,8 @@ const { isOverflowing } = usePostsStore();
 	font-weight: 400;
 }
 
-.more-link {
+.posts-item .more-link {
+	max-width: 100px;
 	color: $purple;
 	font-size: 20px;
 	line-height: 24px;

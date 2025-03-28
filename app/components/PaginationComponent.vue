@@ -7,7 +7,7 @@
 			to="/"
 		>
 			<img
-				src="../assets//icons/next-page-icon.svg"
+				src="../assets/icons/next-page-icon.svg"
 				alt="Next page"
 				class="flipped"
 			/>
@@ -22,12 +22,13 @@
 			</li>
 		</ul>
 		<NuxtLink
+			v-if="currPage < countPages"
 			class="next-page"
 			@click="goNextPage"
 			to="/"
 		>
 			<img
-				src="../assets//icons/next-page-icon.svg"
+				src="../assets/icons/next-page-icon.svg"
 				alt="Next page"
 			/>
 		</NuxtLink>
@@ -38,15 +39,13 @@
 const { query } = useRoute();
 
 const { goToPage, goNextPage, goPreviousPage } = usePostsStore();
-const { pagesArr, pages, currPage, elems } = storeToRefs(usePostsStore());
+const { pagesArr, pages, currPage, countPages } = storeToRefs(usePostsStore());
 
 watch(
 	() => query,
 	newQuery => {
 		if (newQuery.page) {
 			currPage.value = +newQuery.page;
-			elems.value.begin = (currPage.value - 1) * 8;
-			elems.value.end = currPage.value * 8;
 			pages.value.begin = currPage.value > 5 ? currPage.value - 5 : 0;
 			pages.value.end = currPage.value > 5 ? currPage.value : 5;
 		}

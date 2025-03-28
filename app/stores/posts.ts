@@ -4,32 +4,24 @@ export const usePostsStore = defineStore('posts', () => {
 	const { query } = useRoute();
 	const router = useRouter();
 
-	const currPage = ref<number>(+query.page!);
-	const textRef = ref();
+	const currPage = ref<number>(query.page ? +query.page : 1);
+	const textRef = ref<HTMLParagraphElement | null>(null);
 	const isOverflowing = ref<boolean>(false);
 	const countPages = ref<number>(1);
 	const pagesArr = ref<number[]>([]);
-
-	const elems = reactive({
-		begin: currPage.value ? (currPage.value - 1) * 8 : 0,
-		end: currPage.value ? currPage.value * 8 : 8,
-	});
 
 	const pages = reactive({
 		begin: currPage.value > 5 ? currPage.value - 5 : 0,
 		end: currPage.value > 5 ? currPage.value : 5,
 	});
 
-	const updatePosts = (page: number = currPage.value) => {
-		elems.begin = (page - 1) * 8;
-		elems.end = page * 8;
-	};
+	const elemBegin = computed(() => (currPage.value - 1) * 8);
+	const elemEnd = computed(() => currPage.value * 8);
 
 	const goToPage = (page: number) => {
 		router.push({
 			query: { page: page },
 		});
-		updatePosts(page);
 	};
 
 	const goNextPage = () => {
@@ -38,7 +30,6 @@ export const usePostsStore = defineStore('posts', () => {
 			router.push({
 				query: { page: nextPage },
 			});
-			updatePosts(nextPage);
 
 			if (nextPage > pages.end) {
 				pages.begin = nextPage - 5;
@@ -48,7 +39,6 @@ export const usePostsStore = defineStore('posts', () => {
 			router.push({
 				query: { page: currPage.value },
 			});
-			updatePosts(currPage.value);
 		}
 	};
 
@@ -58,7 +48,6 @@ export const usePostsStore = defineStore('posts', () => {
 			router.push({
 				query: { page: prevPage },
 			});
-			updatePosts(prevPage);
 
 			if (prevPage < pages.begin) {
 				pages.begin = prevPage;
@@ -69,7 +58,6 @@ export const usePostsStore = defineStore('posts', () => {
 			router.push({
 				query: { page: currPage.value },
 			});
-			updatePosts(currPage.value);
 		}
 	};
 
@@ -86,7 +74,6 @@ export const usePostsStore = defineStore('posts', () => {
 	return {
 		getPosts,
 		getPost,
-		elems,
 		currPage,
 		pages,
 		textRef,
@@ -96,5 +83,7 @@ export const usePostsStore = defineStore('posts', () => {
 		goToPage,
 		goNextPage,
 		goPreviousPage,
+		elemBegin,
+		elemEnd,
 	};
 });
