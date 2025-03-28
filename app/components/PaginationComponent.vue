@@ -1,36 +1,58 @@
 <template>
 	<div class="pagination">
+		<NuxtLink
+			v-if="pages.begin > 0"
+			class="next-page"
+			@click="goPreviousPage"
+			to="/"
+		>
+			<img
+				src="../assets//icons/next-page-icon.svg"
+				alt="Next page"
+				class="flipped"
+			/>
+		</NuxtLink>
 		<ul class="pages">
 			<li v-for="page in pagesArr?.slice(pages.begin, pages.end)">
-				<button
-					class="page-number"
+				<PaginationLink
 					v-if="pages.begin <= page && pages.end >= page"
-					@click="goToPage(page)"
-					:class="[
-						{
-							active: currPage > 1 ? page === currPage : page === 1,
-						},
-					]"
-				>
-					{{ page }}
-				</button>
+					:handle-click="() => goToPage(page)"
+					:page="page"
+				/>
 			</li>
 		</ul>
-		<button
+		<NuxtLink
 			class="next-page"
 			@click="goNextPage"
+			to="/"
 		>
 			<img
 				src="../assets//icons/next-page-icon.svg"
 				alt="Next page"
 			/>
-		</button>
+		</NuxtLink>
 	</div>
 </template>
 
 <script setup lang="ts">
-const { goToPage, goNextPage, pagesArr, pages } = usePostsStore();
-const { currPage } = storeToRefs(usePostsStore());
+const { query } = useRoute();
+
+const { goToPage, goNextPage, goPreviousPage } = usePostsStore();
+const { pagesArr, pages, currPage, elems } = storeToRefs(usePostsStore());
+
+watch(
+	() => query,
+	newQuery => {
+		if (newQuery.page) {
+			currPage.value = +newQuery.page;
+			elems.value.begin = (currPage.value - 1) * 8;
+			elems.value.end = currPage.value * 8;
+			pages.value.begin = currPage.value > 5 ? currPage.value - 5 : 0;
+			pages.value.end = currPage.value > 5 ? currPage.value : 5;
+		}
+	},
+	{ deep: true, immediate: true }
+);
 </script>
 
 <style scoped lang="scss">
@@ -44,25 +66,6 @@ const { currPage } = storeToRefs(usePostsStore());
 	list-style: none;
 	display: flex;
 	gap: 8px;
-	.page-number {
-		cursor: pointer;
-		border: none;
-		border-radius: 12px;
-		padding: 11px;
-		width: 44px;
-		height: 44px;
-		font-weight: 400;
-		font-size: 16px;
-		line-height: 8px;
-		&:not(.active):hover {
-			background: $white-300;
-		}
-	}
-}
-
-.active {
-	background: $black;
-	color: $white-800;
 }
 
 .next-page {
@@ -83,5 +86,9 @@ const { currPage } = storeToRefs(usePostsStore());
 	&:hover {
 		background: $white-300;
 	}
+}
+
+.flipped {
+	transform: scaleX(-1);
 }
 </style>

@@ -10,14 +10,6 @@ export const usePostsStore = defineStore('posts', () => {
 	const countPages = ref<number>(1);
 	const pagesArr = ref<number[]>([]);
 
-	const getCurrentPage = () => {
-		const { query } = useRoute();
-		const currentPage = query.page ? Number(query.page) : 0;
-		return currentPage;
-	};
-
-	const currentPage = getCurrentPage();
-
 	const elems = reactive({
 		begin: currPage.value ? (currPage.value - 1) * 8 : 0,
 		end: currPage.value ? currPage.value * 8 : 8,
@@ -34,7 +26,6 @@ export const usePostsStore = defineStore('posts', () => {
 	};
 
 	const goToPage = (page: number) => {
-		currPage.value = page;
 		router.push({
 			query: { page: page },
 		});
@@ -42,11 +33,8 @@ export const usePostsStore = defineStore('posts', () => {
 	};
 
 	const goNextPage = () => {
-		const currentPage = getCurrentPage();
-		const nextPage = currentPage + 1;
-
+		const nextPage = currPage.value + 1;
 		if (nextPage <= countPages.value) {
-			currPage.value = nextPage;
 			router.push({
 				query: { page: nextPage },
 			});
@@ -58,9 +46,30 @@ export const usePostsStore = defineStore('posts', () => {
 			}
 		} else {
 			router.push({
-				query: { page: currentPage },
+				query: { page: currPage.value },
 			});
-			updatePosts(currentPage);
+			updatePosts(currPage.value);
+		}
+	};
+
+	const goPreviousPage = () => {
+		const prevPage = currPage.value - 1;
+		if (prevPage > 0) {
+			router.push({
+				query: { page: prevPage },
+			});
+			updatePosts(prevPage);
+
+			if (prevPage < pages.begin) {
+				pages.begin = prevPage;
+				pages.end =
+					prevPage + 5 > countPages.value ? countPages.value : prevPage + 5;
+			}
+		} else {
+			router.push({
+				query: { page: currPage.value },
+			});
+			updatePosts(currPage.value);
 		}
 	};
 
@@ -85,7 +94,7 @@ export const usePostsStore = defineStore('posts', () => {
 		countPages,
 		pagesArr,
 		goToPage,
-		currentPage,
 		goNextPage,
+		goPreviousPage,
 	};
 });

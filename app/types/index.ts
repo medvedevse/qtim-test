@@ -10,3 +10,8 @@ export interface IPost {
 export interface IPageTitleProps {
 	text?: string;
 }
+
+export interface IPaginationButtonProps {
+	page: number;
+	handleClick: (page: number) => void;
+}
