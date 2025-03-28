@@ -1,0 +1,12 @@
+@mixin HeaderNavText {
+	font-weight: 400;
+	font-size: 20px;
+	line-height: 20px;
+}
+
+@mixin ClampText($lines: 3) {
+	overflow: hidden;
+	display: -webkit-box;
+	-webkit-line-clamp: $lines;
+	-webkit-box-orient: vertical;
+}
