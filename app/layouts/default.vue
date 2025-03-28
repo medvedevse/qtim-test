@@ -12,6 +12,7 @@
 
 <style scoped lang="scss">
 .wrapper {
+	max-width: 1440px;
 	display: grid;
 	grid-template-rows: 121px 1fr 900px;
 }

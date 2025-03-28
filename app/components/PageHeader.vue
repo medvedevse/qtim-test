@@ -31,7 +31,6 @@
 
 <style scoped lang="scss">
 .page-header {
-	max-width: 1440px;
 	padding: 0 40px;
 	display: flex;
 	justify-content: space-between;
