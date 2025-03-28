@@ -15,8 +15,8 @@
 </template>
 
 <script setup lang="ts">
-const { getPosts, elems } = usePostsStore();
-const { countPages, pagesArr, textRef, isOverflowing } = storeToRefs(
+const { getPosts } = usePostsStore();
+const { countPages, pagesArr, textRef, isOverflowing, elems } = storeToRefs(
 	usePostsStore()
 );
 const posts = await getPosts();

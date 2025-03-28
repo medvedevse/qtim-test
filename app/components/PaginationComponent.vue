@@ -8,7 +8,7 @@
 					@click="goToPage(page)"
 					:class="[
 						{
-							active: page === currPage,
+							active: currPage > 1 ? page === currPage : page === 1,
 						},
 					]"
 				>

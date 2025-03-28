@@ -42,7 +42,6 @@ export const usePostsStore = defineStore('posts', () => {
 	};
 
 	const goNextPage = () => {
-		console.log(query);
 		const currentPage = getCurrentPage();
 		const nextPage = currentPage + 1;
 

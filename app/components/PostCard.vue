@@ -26,11 +26,9 @@
 <script setup lang="ts">
 import type { IPost } from '~/types';
 
-const { getPosts, isOverflowing } = usePostsStore();
+defineProps<{ post: IPost }>();
 
-const props = defineProps<{ post: IPost }>();
-
-const posts = await getPosts();
+const { isOverflowing } = usePostsStore();
 </script>
 
 <style scoped lang="scss">

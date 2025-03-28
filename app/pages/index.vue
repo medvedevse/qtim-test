@@ -1,6 +1,6 @@
 <template>
 	<PageTitle text="Articles" />
-	<PostsSection />
+	<PostsSection :key="$route.fullPath" />
 </template>
 
 <script setup lang="ts"></script>
