@@ -15,3 +15,11 @@ export interface IPaginationButtonProps {
 	page: number;
 	handleClick: (page: number) => void;
 }
+
+export interface IPostEmits {
+	(e: 'title', value: string): void;
+}
+
+export interface IPostsProps {
+	posts: IPost[];
+}

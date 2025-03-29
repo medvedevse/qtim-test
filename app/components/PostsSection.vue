@@ -15,15 +15,17 @@
 </template>
 
 <script setup lang="ts">
-const { getPosts } = usePostsStore();
+import type { IPostsProps } from '~/types';
+
 const { countPages, pagesArr, elemEnd, elemBegin } = storeToRefs(
 	usePostsStore()
 );
-const posts = await getPosts();
+
+const props = defineProps<IPostsProps>();
 
 onMounted(() => {
-	if (posts.value) {
-		countPages.value = Math.ceil(posts.value.length / 8);
+	if (props.posts) {
+		countPages.value = Math.ceil(props.posts.length / 8);
 
 		for (let page = 1; page <= countPages.value; page++) {
 			pagesArr.value.push(page);

@@ -1,46 +1,10 @@
 <template>
-	<PageTitle :text="post?.title" />
-	<img
-		src="https://img.freepik.com/fotos-gratis/bela-paisagem-natural-com-montanhas-e-lago_23-2150706041.jpg"
-		alt="Изображение поста"
-		class="post-image"
-	/>
-	<p class="post-subtitle">About</p>
-	<p class="post-description">{{ post?.description }}</p>
+	<PageTitle :text="postTitle" />
+	<PostContent @title="postTitle = $event" />
 </template>
 
 <script setup lang="ts">
-const { params } = useRoute();
-
-const { getPost } = usePostsStore();
-const post = await getPost(params.post as string);
+const postTitle = ref<string>('');
 </script>
 
-<style scoped lang="scss">
-.post-title {
-	font-weight: 400;
-	font-size: 84px;
-	line-height: 84px;
-	margin-bottom: 34px;
-}
-
-.post-image {
-	display: block;
-	max-width: 1216px;
-	height: 700px;
-	padding-top: 40px;
-	margin-bottom: 80px;
-}
-
-.post-subtitle {
-	font-size: 16px;
-	line-height: 16px;
-	margin-bottom: 32px;
-}
-
-.post-description {
-	font-size: 36px;
-	line-height: 45px;
-	margin-bottom: 80px;
-}
-</style>
+<style scoped lang="scss"></style>
