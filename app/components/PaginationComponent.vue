@@ -1,7 +1,7 @@
 <template>
 	<div class="pagination">
 		<NuxtLink
-			v-if="pages.begin > 0"
+			v-if="pagesIdx.begin > 0"
 			class="next-page"
 			@click="goPreviousPage"
 			to="/"
@@ -13,9 +13,9 @@
 			/>
 		</NuxtLink>
 		<ul class="pages">
-			<li v-for="page in pagesArr?.slice(pages.begin, pages.end)">
+			<li v-for="page in pagesArr?.slice(pagesIdx.begin, pagesIdx.end)">
 				<PaginationLink
-					v-if="pages.begin <= page && pages.end >= page"
+					v-if="pagesIdx.begin <= page && pagesIdx.end >= page"
 					:handle-click="() => goToPage(page)"
 					:page="page"
 				/>
@@ -38,16 +38,18 @@
 <script setup lang="ts">
 const { query } = useRoute();
 
-const { goToPage, goNextPage, goPreviousPage } = usePostsStore();
-const { pagesArr, pages, currPage, countPages } = storeToRefs(usePostsStore());
+const { goToPage, goNextPage, goPreviousPage, updatePagesRange } =
+	usePostsStore();
+const { pagesArr, pagesIdx, currPage, countPages } = storeToRefs(
+	usePostsStore()
+);
 
 watch(
 	() => query,
 	newQuery => {
 		if (newQuery.page) {
 			currPage.value = +newQuery.page;
-			pages.value.begin = currPage.value > 5 ? currPage.value - 5 : 0;
-			pages.value.end = currPage.value > 5 ? currPage.value : 5;
+			updatePagesRange();
 		}
 	},
 	{ deep: true, immediate: true }

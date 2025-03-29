@@ -18,10 +18,11 @@ const post = await getPost(params.post as string);
 
 const emits = defineEmits<IPostEmits>();
 
-watch(post, newVal => newVal && emits('title', newVal.title), {
-	immediate: true,
-	deep: true,
-});
+post &&
+	watch(post, newVal => newVal && emits('title', newVal.title), {
+		immediate: true,
+		deep: true,
+	});
 </script>
 
 <style scoped lang="scss">

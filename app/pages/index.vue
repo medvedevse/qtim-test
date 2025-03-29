@@ -13,7 +13,7 @@ const { getPosts } = usePostsStore();
 
 const posts = ref<IPost[]>([]);
 const data = await getPosts();
-data.value && (posts.value = data.value);
+data && (posts.value = data);
 </script>
 
 <style scoped lang="scss"></style>
